@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import roberto.cursospringboot.domain.Categoria;
 
 @RestController //escrever e dar CTRL SHIFT O
-@RequestMapping(value ="/categorias") //padrão de mercado o que ta em string
+@RequestMapping(value ="/categorias") //padrão de mercado o que ta em string - (esse é o endpoint rest)
 public class CategoriaResource {
 	
 	@RequestMapping(method = RequestMethod.GET) //obtendo um dado

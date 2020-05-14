@@ -8,24 +8,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Categoria implements Serializable{
+public class Categoria implements Serializable { //significa que os objetos podem ser convertidos para bytes, podendo assim ser gravados em arquivos, em redes...
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) //gerando automaticamente estratégias dos Id's (chave primária)
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // gerando automaticamente estratégias dos Id's (chave primária)
 	private Integer id;
 	private String nome;
-	
-	public Categoria() {	
+
+	public Categoria() {
 	}
 
-	public Categoria(Integer id, String nome) { //Feito direto no botão direito - source -Generate Constructor using fields
+	public Categoria(Integer id, String nome) { // Feito direto no botão direito - source -Generate Constructor using
+												// fields
 		super();
 		this.id = id;
 		this.nome = nome;
 	}
 
-	public Integer getId() {// aqui até linha 31 botão direito - source - Generate Getters and Setters (pros dois...)
+	public Integer getId() {// aqui até linha 31 botão direito - source - Generate Getters and Setters (pros
+							// dois...)
 		return id;
 	}
 
@@ -42,15 +44,16 @@ public class Categoria implements Serializable{
 	}
 
 	@Override
-	public int hashCode() {//feito com botão direito - source - Generate hashCode and equals() (selecionado apenas o id)
+	public int hashCode() {// feito com botão direito - source - Generate hashCode and equals()
+							// (selecionado apenas o id)
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
-	@Override 
-	public boolean equals(Object obj) { //veio junto da linha 34 - o de cima é hash e este equals
+	@Override
+	public boolean equals(Object obj) { // veio junto da linha 34 - o de cima é hash e este equals
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -65,8 +68,5 @@ public class Categoria implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
 
 }
