@@ -1,29 +1,27 @@
 package roberto.cursospringboot.resources;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import roberto.cursospringboot.domain.Categoria;
+import roberto.cursospringboot.services.CategoriaService;
 
 @RestController //escrever e dar CTRL SHIFT O
 @RequestMapping(value ="/categorias") //padrão de mercado o que ta em string - (esse é o endpoint rest)
 public class CategoriaResource {
 	
-	@RequestMapping(method = RequestMethod.GET) //obtendo um dado
-	public List<Categoria> listar() {
-		
-		Categoria cat1 = new Categoria(1, "informática");
-		Categoria cat2 = new Categoria(2, "Escritório");
-		
-		List<Categoria> lista = new ArrayList<>();
-		lista.add(cat1);
-		lista.add(cat2);
-				
-		return lista;
+	@Autowired //instanciar automaticamente o objeto abaixo (Spring)
+	private CategoriaService service;
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.GET) //obtendo um dado
+	public ResponseEntity<?> find(@PathVariable Integer id) { //uso do PathVariable do spring para o id da URL buscado ir para cá
+		Categoria obj = service.find(id);
+		return ResponseEntity.ok().body(obj); //ResponseEntity já encapsula informações de uma resposta HTTP para serviço REST
+		//aqui ele vai retornar um ok do corpo do objeto obj
 	}
 
 }
