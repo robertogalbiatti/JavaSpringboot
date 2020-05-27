@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Produto  implements Serializable { //significa que os objetos podem ser convertidos para bytes, podendo assim ser gravados em arquivos, em redes...
 	private static final long serialVersionUID = 1L;
@@ -22,6 +24,7 @@ public class Produto  implements Serializable { //significa que os objetos podem
 	private String nome;
 	private Double preco;
 	
+	@JsonBackReference
 	@ManyToMany //no JPA quando é relação N-N coloca-se isso em um dos dois lados (aqui é no Produto)
 	@JoinTable(name = "PRODUTO_CATEGORIA",              // e então essa notação define quem é a tabela que faz o N-N no banco
 		joinColumns = @JoinColumn(name = "produto_id"), //esta é a chave estrangeira correspondente ao produto
