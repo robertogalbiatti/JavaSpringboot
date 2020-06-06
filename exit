@@ -1,0 +1,57 @@
+[1mdiff --git a/Conceitos Springboot.docx b/Conceitos Springboot.docx[m
+[1mindex 3a725ec..fee9a43 100644[m
+[1m--- a/Conceitos Springboot.docx[m	
+[1m+++ b/Conceitos Springboot.docx[m	
+[36m@@ -60,4 +60,8 @@[m [mDe acordo com o diagrama, apenas o Endereço conhece Cidade.[m
+ No application feitas as associações e criados clientes e endereços respectivos. Criados repositories e dado "@Autowired" na classe da aplicação. A partir dos repositories podemos salvar os dados.[m
+ Feito a cópia do CategoriaResource e dado CTRL F5 para modificar para Cliente, assim como no Service.[m
+ De acordo com o diagrama, feita proteção cíclica JSON na classe Cliente e na classe endereço colocada notação @back. Como o endereço conhece a cidade e é uma associação direcionada, não precisa ser feito nada na cidade. Porém há uma relação cíclica entre Cidade e Estado, precisa proteger também.[m
+[32m+[m[32m--------------------------------------------------------------------------------[m
+ OBS: EM JSON O {} é LISTA!![m
+[32m+[m[32mCriando Pedido, EstadoPagamento, Pagamento. Uma alteração no Cliente foi feito pela sua relação. Na hora de criar o Hash Equals, PagamentoComCartao e ComBoleto não precisa, pois o `id' está na `mãe'. Para Serializable, colocar apenas o numero da versão nas subclasses (serialVersionUID = 1L)[m
+[32m+[m[32mQuando começamos a fazer o mapeamento Objeto-relacional em Pagamento e Pedido, queremos que ambos possuam o mesmo id, pois a relação é 1-1. Então, não é colocado o GeneratedValue. Portanto colocado @MapsId //para garantir que o id do pedido seja o mesmo do Pagamento[m
+[32m+[m[32mOBS: Lá em pedido colocado: @OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")Pois é uma peculiaridade do JPA![m
+[1mdiff --git a/cursospringboot/src/main/java/roberto/cursospringboot/domain/Cliente.java b/cursospringboot/src/main/java/roberto/cursospringboot/domain/Cliente.java[m
+[1mindex a88599c..086341d 100644[m
+[1m--- a/cursospringboot/src/main/java/roberto/cursospringboot/domain/Cliente.java[m
+[1m+++ b/cursospringboot/src/main/java/roberto/cursospringboot/domain/Cliente.java[m
+[36m@@ -38,6 +38,8 @@[m [mpublic class Cliente implements Serializable { //significa que os objetos podem[m
+ 	@CollectionTable(name="TELEFONE")[m
+ 	private Set<String> telefones = new HashSet<>();//nao aceita repetição, por isso utilizado.[m
+ 	[m
+[32m+[m	[32mprivate List<Pedido> pedidos = new ArrayList<>();[m
+[32m+[m[41m	[m
+ 	public Cliente() {[m
+ 	}[m
+ [m
+[36m@@ -106,6 +108,14 @@[m [mpublic class Cliente implements Serializable { //significa que os objetos podem[m
+ 		this.telefones = telefones;[m
+ 	}[m
+ [m
+[32m+[m	[32mpublic List<Pedido> getPedidos() {[m
+[32m+[m		[32mreturn pedidos;[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m	[32mpublic void setPedidos(List<Pedido> pedidos) {[m
+[32m+[m		[32mthis.pedidos = pedidos;[m
+[32m+[m	[32m}[m
+[32m+[m
+ 	@Override[m
+ 	public int hashCode() {[m
+ 		final int prime = 31;[m
+[36m@@ -130,6 +140,6 @@[m [mpublic class Cliente implements Serializable { //significa que os objetos podem[m
+ 			return false;[m
+ 		return true;[m
+ 	}[m
+[31m-	[m
+[32m+[m
+ 	[m
+ }[m
+[1mdiff --git a/~$nceitos Springboot.docx b/~$nceitos Springboot.docx[m
+[1mdeleted file mode 100644[m
+[1mindex 30bfdf9..0000000[m
+Failed to extract required information from <C:\Users\betao\AppData\Local\Temp/7oJoC2_~$nceitos Springboot.docx>!
+[1mdiff --git a/~WRL0005.tmp b/~WRL0005.tmp[m
+[1mdeleted file mode 100644[m
+[1mindex 6baecc2..0000000[m
+Binary files a/~WRL0005.tmp and /dev/null differ

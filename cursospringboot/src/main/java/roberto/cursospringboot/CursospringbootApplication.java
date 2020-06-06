@@ -1,5 +1,6 @@
 package roberto.cursospringboot;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import roberto.cursospringboot.domain.Cidade;
 import roberto.cursospringboot.domain.Cliente;
 import roberto.cursospringboot.domain.Endereco;
 import roberto.cursospringboot.domain.Estado;
+import roberto.cursospringboot.domain.Pagamento;
+import roberto.cursospringboot.domain.PagamentoComBoleto;
+import roberto.cursospringboot.domain.PagamentoComCartao;
+import roberto.cursospringboot.domain.Pedido;
 import roberto.cursospringboot.domain.Produto;
+import roberto.cursospringboot.domain.enums.EstadoPagamento;
 import roberto.cursospringboot.domain.enums.TipoCliente;
 import roberto.cursospringboot.repositories.CategoriaRepository;
 import roberto.cursospringboot.repositories.CidadeRepository;
 import roberto.cursospringboot.repositories.ClienteRepository;
 import roberto.cursospringboot.repositories.EnderecoRepository;
 import roberto.cursospringboot.repositories.EstadoRepository;
+import roberto.cursospringboot.repositories.PagamentoRepository;
+import roberto.cursospringboot.repositories.PedidoRepository;
 import roberto.cursospringboot.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,7 +44,11 @@ public class CursospringbootApplication implements CommandLineRunner { // permit
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(CursospringbootApplication.class, args);
 	}
@@ -89,6 +101,24 @@ public class CursospringbootApplication implements CommandLineRunner { // permit
 		
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		//Instanciando os pedidos para depois sim instanciar os pagamentos (retirado pagamento do construtor Pedido!!)
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		//Salvando primeiro os Pedidos e depois salvar os pagamentos dos pedidos!
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		
 	}
 	
