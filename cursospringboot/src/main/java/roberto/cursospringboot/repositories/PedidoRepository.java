@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import roberto.cursospringboot.domain.Pedido;
 
-//Objeto que fará acesso aos dados do Objeto Categoria
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Integer>{
 

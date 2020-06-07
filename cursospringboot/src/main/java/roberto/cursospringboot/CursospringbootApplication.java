@@ -13,6 +13,7 @@ import roberto.cursospringboot.domain.Cidade;
 import roberto.cursospringboot.domain.Cliente;
 import roberto.cursospringboot.domain.Endereco;
 import roberto.cursospringboot.domain.Estado;
+import roberto.cursospringboot.domain.ItemPedido;
 import roberto.cursospringboot.domain.Pagamento;
 import roberto.cursospringboot.domain.PagamentoComBoleto;
 import roberto.cursospringboot.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import roberto.cursospringboot.repositories.CidadeRepository;
 import roberto.cursospringboot.repositories.ClienteRepository;
 import roberto.cursospringboot.repositories.EnderecoRepository;
 import roberto.cursospringboot.repositories.EstadoRepository;
+import roberto.cursospringboot.repositories.ItemPedidoRepository;
 import roberto.cursospringboot.repositories.PagamentoRepository;
 import roberto.cursospringboot.repositories.PedidoRepository;
 import roberto.cursospringboot.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class CursospringbootApplication implements CommandLineRunner { // permit
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursospringbootApplication.class, args);
@@ -120,6 +124,18 @@ public class CursospringbootApplication implements CommandLineRunner { // permit
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 	
 	
