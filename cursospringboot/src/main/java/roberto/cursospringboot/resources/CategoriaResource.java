@@ -1,11 +1,15 @@
 package roberto.cursospringboot.resources;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import roberto.cursospringboot.domain.Categoria;
 import roberto.cursospringboot.services.CategoriaService;
@@ -22,6 +26,14 @@ public class CategoriaResource {
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj); //ResponseEntity já encapsula informações de uma resposta HTTP para serviço REST
 		//aqui ele vai retornar um ok do corpo do objeto obj
+	}
+	
+	//método para receber um Categoria no formato JSON e inserí-lo no banco de dados
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@RequestBody Categoria obj){ //resposta HTTP sem corpo -RequestBody faz o JSON ser convertido para Java automaticamente
+		obj = service.insert(obj); //obj é inserido no Banco de Dados e o próprio banco vai atribuir novo ID e fornecer como argumento da URI
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri(); //fromCurrentRequest() ele busca o "localhost:8080/categorias/" e é inserido o "1"
+		return ResponseEntity.created(uri).build(); //vai retornar a resposta
 	}
 
 }
