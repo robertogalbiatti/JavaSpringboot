@@ -17,12 +17,18 @@ public class CategoriaService {
 	
 	public Categoria find(Integer id) {
 		Optional<Categoria> obj = repo.findById(id); //vai no banco e busca.
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
+		return obj.orElseThrow(() -> new ObjectNotFoundException( //lança a exceção se não encontrar!!
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 				}
 	
 	public Categoria insert(Categoria obj) { //id deve ser nulo para que seja uma inserção, do contrário é uma atualização.
 		obj.setId(null);
+		return repo.save(obj);
+	}
+	
+	//parecido com o insert, porém este nao precisar pegar o null pois já há id.
+	public Categoria update(Categoria obj) {
+		find(obj.getId());//verifica se o obj existe, usamos a exceção do método...
 		return repo.save(obj);
 	}
 }

@@ -22,7 +22,7 @@ public class CategoriaResource {
 	private CategoriaService service;
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET) //obtendo um dado
-	public ResponseEntity<?> find(@PathVariable Integer id) { //uso do PathVariable do spring para o id da URL buscado ir para cá
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) { //uso do PathVariable do spring para o id da URL buscado ir para cá
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj); //ResponseEntity já encapsula informações de uma resposta HTTP para serviço REST
 		//aqui ele vai retornar um ok do corpo do objeto obj
@@ -34,6 +34,14 @@ public class CategoriaResource {
 		obj = service.insert(obj); //obj é inserido no Banco de Dados e o próprio banco vai atribuir novo ID e fornecer como argumento da URI
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri(); //fromCurrentRequest() ele busca o "localhost:8080/categorias/" e é inserido o "1"
 		return ResponseEntity.created(uri).build(); //vai retornar a resposta
+	}
+	
+	//método PUT: mistura de GET e POST: temos que colocar o RequestBody para ele receber o objeto e vai receber o parâmetro "do GET".
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 
 }

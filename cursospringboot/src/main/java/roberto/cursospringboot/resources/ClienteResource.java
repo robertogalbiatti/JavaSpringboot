@@ -18,7 +18,7 @@ public class ClienteResource {
 	private ClienteService service;
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET) //obtendo um dado
-	public ResponseEntity<?> find(@PathVariable Integer id) { //uso do PathVariable do spring para o id da URL buscado ir para cá
+	public ResponseEntity<Cliente> find(@PathVariable Integer id) { //uso do PathVariable do spring para o id da URL buscado ir para cá
 		Cliente obj = service.find(id);
 		return ResponseEntity.ok().body(obj); //ResponseEntity já encapsula informações de uma resposta HTTP para serviço REST
 		//aqui ele vai retornar um ok do corpo do objeto obj
