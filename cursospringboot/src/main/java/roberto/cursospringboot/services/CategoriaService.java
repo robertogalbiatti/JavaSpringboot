@@ -1,12 +1,15 @@
 package roberto.cursospringboot.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import roberto.cursospringboot.domain.Categoria;
 import roberto.cursospringboot.repositories.CategoriaRepository;
+import roberto.cursospringboot.services.exceptions.DataIntegrityException;
 import roberto.cursospringboot.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -30,5 +33,19 @@ public class CategoriaService {
 	public Categoria update(Categoria obj) {
 		find(obj.getId());//verifica se o obj existe, usamos a exceção do método...
 		return repo.save(obj);
+	}
+	
+	public void deleteById(Integer id) {
+		find(id);
+		try {
+			repo.deleteById(id);
+		} catch (DataIntegrityViolationException e) {//mostrar uma exceção criada por nós
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos");
+		}
+		
+	}
+	
+	public List<Categoria> findAll (){
+		return repo.findAll();
 	}
 }

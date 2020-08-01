@@ -1,6 +1,8 @@
 package roberto.cursospringboot.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import roberto.cursospringboot.domain.Categoria;
+import roberto.cursospringboot.dto.CategoriaDTO;
 import roberto.cursospringboot.services.CategoriaService;
 
 @RestController //escrever e dar CTRL SHIFT O
@@ -43,5 +46,17 @@ public class CategoriaResource {
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
-
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {//retornar uma resposta com corpo vazio
+		service.deleteById(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll() { //uso do PathVariable do spring para o id da URL buscado ir para cá
+		List<Categoria> list = service.findAll();
+		List<CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
 }
