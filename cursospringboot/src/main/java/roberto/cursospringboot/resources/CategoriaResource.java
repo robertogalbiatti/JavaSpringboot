@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +37,8 @@ public class CategoriaResource {
 	
 	//método para receber um Categoria no formato JSON e inserí-lo no banco de dados
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria obj){ //resposta HTTP sem corpo -RequestBody faz o JSON ser convertido para Java automaticamente
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDTO){ //resposta HTTP sem corpo -RequestBody faz o JSON ser convertido para Java automaticamente
+		Categoria obj = service.fromDTO(objDTO);
 		obj = service.insert(obj); //obj é inserido no Banco de Dados e o próprio banco vai atribuir novo ID e fornecer como argumento da URI
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri(); //fromCurrentRequest() ele busca o "localhost:8080/categorias/" e é inserido o "1"
 		return ResponseEntity.created(uri).build(); //vai retornar a resposta
@@ -43,7 +46,8 @@ public class CategoriaResource {
 	
 	//método PUT: mistura de GET e POST: temos que colocar o RequestBody para ele receber o objeto e vai receber o parâmetro "do GET".
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDTO, @PathVariable Integer id){
+		Categoria obj = service.fromDTO(objDTO);
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
