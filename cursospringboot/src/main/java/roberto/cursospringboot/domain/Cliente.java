@@ -50,7 +50,7 @@ public class Cliente implements Serializable { //significa que os objetos podem 
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipo = tipo.getCod(); //colocado o getCod() na mão conf. linha 16
+		this.tipo = (tipo ==null) ? null : tipo.getCod(); //colocado o getCod() na mão conf. linha 16
 	}
 
 	public Integer getId() {
